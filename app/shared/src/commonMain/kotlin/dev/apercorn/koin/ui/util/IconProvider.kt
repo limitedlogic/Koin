@@ -2,104 +2,98 @@ package dev.apercorn.koin.ui.util
 
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import compose.icons.AllIcons
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 
 
 object IconProvider {
-	private val allIcons: Map<String, ImageVector> by lazy {
-		TablerIcons.AllIcons.associateBy { it.name.substringAfterLast('.') }
-	}
-
 	val iconPalette: Map<String, ImageVector> = mapOf(
 		// Finance
-		"building-bank" to TablerIcons.BuildingBank,
-		"cash" to TablerIcons.Cash,
-		"cash-banknote" to TablerIcons.CashBanknote,
-		"credit-card" to TablerIcons.CreditCard,
-		"wallet" to TablerIcons.Wallet,
-		"coin" to TablerIcons.Coin,
-		"currency-dollar" to TablerIcons.CurrencyDollar,
-		"receipt" to TablerIcons.Receipt,
-		"report-money" to TablerIcons.ReportMoney,
-		"chart-bar" to TablerIcons.ChartBar,
-		"trending-up" to TablerIcons.TrendingUp,
-		"arrow-up-circle" to TablerIcons.ArrowUpCircle,
+		"building-bank" to TablerIcons.Outlined.BuildingBank,
+		"cash" to TablerIcons.Outlined.Cash,
+		"cash-banknote" to TablerIcons.Outlined.CashBanknote,
+		"credit-card" to TablerIcons.Outlined.CreditCard,
+		"wallet" to TablerIcons.Outlined.Wallet,
+		"coin" to TablerIcons.Outlined.Coin,
+		"currency-dollar" to TablerIcons.Outlined.CurrencyDollar,
+		"receipt" to TablerIcons.Outlined.Receipt,
+		"report-money" to TablerIcons.Outlined.ReportMoney,
+		"chart-bar" to TablerIcons.Outlined.ChartBar,
+		"trending-up" to TablerIcons.Outlined.TrendingUp,
+		"arrow-up-circle" to TablerIcons.Outlined.ArrowUpCircle,
 
 		// Food & Dining
-		"utensils" to TablerIcons.ToolsKitchen,
-		"pizza" to TablerIcons.Pizza,
-		"coffee" to TablerIcons.Mug,
-		"ice-cream" to TablerIcons.IceCream,
-		"glass-full" to TablerIcons.GlassFull,
+		"utensils" to TablerIcons.Outlined.ToolsKitchen,
+		"pizza" to TablerIcons.Outlined.Pizza,
+		"coffee" to TablerIcons.Outlined.Mug,
+		"ice-cream" to TablerIcons.Outlined.IceCream,
+		"glass-full" to TablerIcons.Outlined.GlassFull,
 
 		// Transport
-		"car" to TablerIcons.Car,
-		"bus" to TablerIcons.Bus,
-		"plane" to TablerIcons.Plane,
-		"bike" to TablerIcons.Bike,
-		"ship" to TablerIcons.Ship,
+		"car" to TablerIcons.Outlined.Car,
+		"bus" to TablerIcons.Outlined.Bus,
+		"plane" to TablerIcons.Outlined.Plane,
+		"bike" to TablerIcons.Outlined.Bike,
+		"ship" to TablerIcons.Outlined.Ship,
 
 		// Shopping
-		"shopping-bag" to TablerIcons.Basket,
-		"shopping-cart" to TablerIcons.ShoppingCart,
-		"tag" to TablerIcons.Tag,
-		"gift" to TablerIcons.Gift,
+		"shopping-bag" to TablerIcons.Outlined.Basket,
+		"shopping-cart" to TablerIcons.Outlined.ShoppingCart,
+		"tag" to TablerIcons.Outlined.Tag,
+		"gift" to TablerIcons.Outlined.Gift,
 
 		// Home & Housing
-		"home" to TablerIcons.Home,
-		"home-2" to TablerIcons.Home2,
-		"building" to TablerIcons.Building,
-		"bed" to TablerIcons.Bed,
+		"home" to TablerIcons.Outlined.Home,
+		"home-2" to TablerIcons.Outlined.Home2,
+		"building" to TablerIcons.Outlined.Building,
+		"bed" to TablerIcons.Outlined.Bed,
 
 		// Bills & Utilities
-		"file-invoice" to TablerIcons.FileInvoice,
-		"bolt" to TablerIcons.Bolt,
-		"droplet" to TablerIcons.Droplet,
-		"wifi" to TablerIcons.Wifi,
-		"phone" to TablerIcons.Phone,
+		"file-invoice" to TablerIcons.Outlined.FileInvoice,
+		"bolt" to TablerIcons.Outlined.Bolt,
+		"droplet" to TablerIcons.Outlined.Droplet,
+		"wifi" to TablerIcons.Outlined.Wifi,
+		"phone" to TablerIcons.Outlined.Phone,
 
 		// Entertainment
-		"movie" to TablerIcons.Movie,
-		"music" to TablerIcons.Music,
-		"device-gamepad" to TablerIcons.DeviceGamepad,
-		"ball-football" to TablerIcons.BallFootball,
-		"device-tv" to TablerIcons.DeviceTv,
+		"movie" to TablerIcons.Outlined.Movie,
+		"music" to TablerIcons.Outlined.Music,
+		"device-gamepad" to TablerIcons.Outlined.DeviceGamepad,
+		"ball-football" to TablerIcons.Outlined.BallFootball,
+		"device-tv" to TablerIcons.Outlined.DeviceTv,
 
 		// Health
-		"heart" to TablerIcons.Heart,
-		"ambulance" to TablerIcons.Ambulance,
-		"stethoscope" to TablerIcons.Stethoscope,
-		"pill" to TablerIcons.Pill,
+		"heart" to TablerIcons.Outlined.Heart,
+		"ambulance" to TablerIcons.Outlined.Ambulance,
+		"stethoscope" to TablerIcons.Outlined.Stethoscope,
+		"pill" to TablerIcons.Outlined.Pill,
 
 		// Education
-		"book" to TablerIcons.Book,
-		"school" to TablerIcons.School,
-		"pencil" to TablerIcons.Pencil,
-		"bookmarks" to TablerIcons.Bookmarks,
+		"book" to TablerIcons.Outlined.Book,
+		"school" to TablerIcons.Outlined.School,
+		"pencil" to TablerIcons.Outlined.Pencil,
+		"bookmarks" to TablerIcons.Outlined.Bookmarks,
 
 		// Income & Work
-		"briefcase" to TablerIcons.Briefcase,
+		"briefcase" to TablerIcons.Outlined.Briefcase,
 
 		// General / Misc
-		"star" to TablerIcons.Star,
-		"settings" to TablerIcons.Settings,
-		"user" to TablerIcons.User,
-		"world" to TablerIcons.World,
-		"bell" to TablerIcons.Bell,
-		"flag" to TablerIcons.Flag,
-		"dots" to TablerIcons.Dots,
-		"archive" to TablerIcons.Archive,
-		"palette" to TablerIcons.Palette,
-		"photo" to TablerIcons.Photo,
+		"star" to TablerIcons.Outlined.Star,
+		"settings" to TablerIcons.Outlined.Settings,
+		"user" to TablerIcons.Outlined.User,
+		"world" to TablerIcons.Outlined.World,
+		"bell" to TablerIcons.Outlined.Bell,
+		"flag" to TablerIcons.Outlined.Flag,
+		"dots" to TablerIcons.Outlined.Dots,
+		"archive" to TablerIcons.Outlined.Archive,
+		"palette" to TablerIcons.Outlined.Palette,
+		"photo" to TablerIcons.Outlined.Photo,
 	)
 
-	val defaultIcon: ImageVector = TablerIcons.QuestionMark
+	val defaultIcon: ImageVector = TablerIcons.Outlined.QuestionMark
 
 	fun resolve(iconName: String): ImageVector {
 		return iconPalette[iconName]
-			?: allIcons[iconName.kebabToPascalCase()]
 			?: defaultIcon
 	}
 
@@ -114,10 +108,5 @@ object IconProvider {
 		} catch (_: Exception) {
 			fallback
 		}
-	}
-
-	private fun String.kebabToPascalCase(): String {
-		return split('-')
-			.joinToString("") { it.replaceFirstChar { char -> char.uppercase() } }
 	}
 }

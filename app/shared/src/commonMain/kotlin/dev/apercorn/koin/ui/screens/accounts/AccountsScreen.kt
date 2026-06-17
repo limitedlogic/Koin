@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 import dev.apercorn.koin.core.util.CurrencyFormatter
 import dev.apercorn.koin.ui.components.layout.*
 import dev.apercorn.koin.ui.screens.accounts.components.*
@@ -33,12 +33,12 @@ object AccountsScreen : Screen {
 					title = "Accounts",
 					actions = listOf(
 						ActionItem(
-							icon = TablerIcons.Plus,
+							icon = TablerIcons.Outlined.Plus,
 							contentDescription = "Add account",
 							onClick = { showForm = true }
 						),
 						ActionItem(
-							icon = TablerIcons.Dots,
+							icon = TablerIcons.Outlined.Dots,
 							contentDescription = "More",
 							onClick = { }
 						)

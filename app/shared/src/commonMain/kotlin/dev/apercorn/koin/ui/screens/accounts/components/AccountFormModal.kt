@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 import dev.apercorn.koin.core.domain.model.AccountType
 import dev.apercorn.koin.core.util.CurrencyInfo
 import dev.apercorn.koin.ui.components.ColorIcon
@@ -41,19 +41,19 @@ fun AccountFormModal(
 	if (showForm) {
 		val typeInfo = when (selectedType) {
 			AccountType.Cash -> Triple(
-				TablerIcons.Cash,
+				TablerIcons.Outlined.Cash,
 				"Physical cash",
 				"Track cash on hand for daily spending"
 			)
 
 			AccountType.Checkings -> Triple(
-				TablerIcons.CreditCard,
+				TablerIcons.Outlined.CreditCard,
 				"Best for everyday spending",
 				"Use checking accounts for regular expenses, bills, and day-to-day transactions."
 			)
 
 			AccountType.Savings -> Triple(
-				TablerIcons.Coin,
+				TablerIcons.Outlined.Coin,
 				"Save for the future",
 				"Set aside money for goals and earn interest over time"
 			)
@@ -126,7 +126,7 @@ fun AccountFormModal(
 
 				SmallPillButton(
 					text = if (showDescription) "Remove" else "Add description",
-					leadingIcon = if (showDescription) TablerIcons.Minus else TablerIcons.Plus,
+					leadingIcon = if (showDescription) TablerIcons.Outlined.Minus else TablerIcons.Outlined.Plus,
 					onClick = { showDescription = !showDescription }
 				)
 			}
@@ -137,7 +137,7 @@ fun AccountFormModal(
 				selectedValue = selectedType.name,
 				leadingIcon = {
 					ColorIcon(
-						imageVector = TablerIcons.BuildingBank,
+						imageVector = TablerIcons.Outlined.BuildingBank,
 						onClick = { showTypePicker = true },
 						size = 40.dp,
 						color = MaterialTheme.colorScheme.primary,
@@ -154,7 +154,7 @@ fun AccountFormModal(
 				iconPadding = PaddingValues(horizontal = 8.dp),
 				leadingIcon = {
 					Icon(
-						imageVector = TablerIcons.InfoSquare,
+						imageVector = TablerIcons.Outlined.InfoSquare,
 						contentDescription = null,
 						tint = MaterialTheme.colorScheme.onSecondaryContainer,
 						modifier = Modifier.size(30.dp)
@@ -172,7 +172,7 @@ fun AccountFormModal(
 					selectedValue = "${selectedCurrency?.code} — ${selectedCurrency?.name}",
 					leadingIcon = {
 						ColorIcon(
-							imageVector = TablerIcons.Coin,
+							imageVector = TablerIcons.Outlined.Coin,
 							onClick = { showCurrencyPicker = true },
 							size = 40.dp,
 							color = MaterialTheme.colorScheme.secondary,
@@ -195,7 +195,7 @@ fun AccountFormModal(
 
 				SmallPillButton(
 					text = if (showBalanceField) "Remove" else "Set initial balance",
-					leadingIcon = if (showBalanceField) TablerIcons.Minus else TablerIcons.CurrencyDollar,
+					leadingIcon = if (showBalanceField) TablerIcons.Outlined.Minus else TablerIcons.Outlined.CurrencyDollar,
 					onClick = { showBalanceField = !showBalanceField }
 				)
 			}
@@ -287,7 +287,7 @@ if (showCurrencyPicker) {
 				horizontalArrangement = Arrangement.spacedBy(12.dp)
 			) {
 				Icon(
-					imageVector = TablerIcons.Search,
+					imageVector = TablerIcons.Outlined.Search,
 					contentDescription = null,
 					tint = MaterialTheme.colorScheme.onSurfaceVariant,
 					modifier = Modifier.size(20.dp)
@@ -336,7 +336,7 @@ if (showCurrencyPicker) {
 					}
 					if (isSelected) {
 						Icon(
-							imageVector = TablerIcons.Check,
+							imageVector = TablerIcons.Outlined.Check,
 							contentDescription = "Selected",
 							tint = MaterialTheme.colorScheme.primary,
 							modifier = Modifier.size(24.dp)

@@ -1,4 +1,4 @@
-package dev.apercorn.koin.ui.screens.transactions.entry.components
+package dev.apercorn.koin.ui.screens.transactions.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,15 +8,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 import dev.apercorn.koin.ui.components.CircularIcon
 
 /**
  * Scrolls through dates one day at a time. Tapping the label opens a full calendar picker.
  */
 @Composable
-fun TransactionDatePicker(
+fun DatePicker(
 	selectedDateLabel: String,
 	canGoBack: Boolean,
 	canGoForward: Boolean,
@@ -34,7 +34,7 @@ fun TransactionDatePicker(
 	) {
 		// left chevron
 		CircularIcon(
-			imageVector = TablerIcons.ChevronLeft,
+			imageVector = TablerIcons.Outlined.ChevronLeft,
 			onClick = { if (canGoBack) onPrevDay() },
 			iconSize = 22.dp,
 			circleSize = 36.dp,
@@ -54,7 +54,7 @@ fun TransactionDatePicker(
 			verticalAlignment = Alignment.CenterVertically
 		) {
 			Icon(
-				imageVector = TablerIcons.Calendar,
+				imageVector = TablerIcons.Outlined.Calendar,
 				contentDescription = "Pick date",
 				tint = MaterialTheme.colorScheme.onSurface,
 				modifier = Modifier.size(20.dp)
@@ -72,7 +72,7 @@ fun TransactionDatePicker(
 
 		// right chevron
 		CircularIcon(
-			imageVector = TablerIcons.ChevronRight,
+			imageVector = TablerIcons.Outlined.ChevronRight,
 			onClick = { if (canGoForward) onNextDay() },
 			iconSize = 22.dp,
 			circleSize = 36.dp,

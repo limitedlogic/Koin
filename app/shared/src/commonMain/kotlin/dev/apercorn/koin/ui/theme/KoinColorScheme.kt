@@ -8,25 +8,29 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class KoinCustomColors(
+	// Layout colors
 	val dragHandle: Color,
-	
-	
+	val numpadButton: Color,
+
+	// Semantic colors
 	val profit: Color,
 	val loss: Color,
 )
 
 val LocalKoinCustomColors = staticCompositionLocalOf {
 	KoinCustomColors(
+		dragHandle = Color.Unspecified,
+		numpadButton = Color.Unspecified,
 		profit = Color.Unspecified,
 		loss = Color.Unspecified,
-		dragHandle = Color.Unspecified
 	)
 }
 
 val DarkKoinCustomColors = KoinCustomColors(
 	// Layout colors
 	dragHandle = Color(0xFF313131),
-	
+	numpadButton = Color(0xFF050505),
+
 	// Semantic colors
 	profit = Color(0xFF81C784),
 	loss = Color(0xFFE57373),
@@ -35,11 +39,11 @@ val DarkKoinCustomColors = KoinCustomColors(
 val LightKoinCustomColors = KoinCustomColors(
 	// Layout colors
 	dragHandle = Color(0xFF313131),
-		
+	numpadButton = Color(0xFF171717),
+
 	// Semantic colors
 	profit = Color(0xFF388E3C),
 	loss = Color(0xFFD32F2F),
-	
 )
 
 val DarkKoinColorScheme = darkColorScheme(

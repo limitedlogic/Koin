@@ -17,8 +17,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.filled.*
+import dev.seyfarth.tablericons.outlined.*
 import com.patrykandpatrick.vico.compose.cartesian.CartesianChartHost
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLine
@@ -54,8 +55,8 @@ fun AccountDetailsSheet(
 
 	ModalBottomSheet(
 		onDismiss = onDismiss,
-		showGrabber = true,
-		containerColor = MaterialTheme.colorScheme.surface
+		containerColor = MaterialTheme.colorScheme.surface,
+		showGrabber = false,
 	) {
 		Column(
 			modifier = Modifier
@@ -106,13 +107,13 @@ fun AccountDetailsSheet(
 				horizontalArrangement = Arrangement.spacedBy(12.dp)
 			) {
 				ActionButton(
-					icon = TablerIcons.Edit,
+					icon = TablerIcons.Outlined.Edit,
 					label = "Set balance",
 					onClick = onSetBalance,
 					modifier = Modifier.weight(1f)
 				)
 				ActionButton(
-					icon = TablerIcons.ArrowsLeftRight,
+					icon = TablerIcons.Outlined.ArrowsLeftRight,
 					label = "Transfer",
 					onClick = onTransfer,
 					modifier = Modifier.weight(1f)
@@ -126,13 +127,13 @@ fun AccountDetailsSheet(
 				horizontalArrangement = Arrangement.spacedBy(12.dp)
 			) {
 				ActionButton(
-					icon = TablerIcons.Plus,
+					icon = TablerIcons.Outlined.Plus,
 					label = "New Transaction",
 					onClick = onNewTransaction,
 					modifier = Modifier.weight(1f)
 				)
 				ActionButton(
-					icon = TablerIcons.List,
+					icon = TablerIcons.Outlined.List,
 					label = "View All",
 					onClick = onViewAll,
 					modifier = Modifier.weight(1f)
@@ -151,7 +152,7 @@ fun AccountDetailsSheet(
 				shape = RoundedCornerShape(12.dp)
 			) {
 				Icon(
-					imageVector = TablerIcons.Adjustments,
+					imageVector = TablerIcons.Outlined.Adjustments,
 					contentDescription = null,
 					modifier = Modifier.size(18.dp)
 				)
@@ -179,7 +180,7 @@ private fun AccountTitleBar(
 	) {
 		// Close button (left)
 		CircularIcon(
-			imageVector = TablerIcons.X,
+			imageVector = TablerIcons.Outlined.X,
 			onClick = onClose,
 			iconSize = 26.dp,
 			circleSize = 40.dp,
@@ -216,12 +217,12 @@ private fun AccountTitleBar(
 
 		// Star button (right)
 		CircularIcon(
-			imageVector = if (isPrimary) TablerIcons.Star else TablerIcons.Star,
+			imageVector = if (isPrimary) TablerIcons.Filled.Star else TablerIcons.Outlined.Star,
 			onClick = onTogglePrimary,
 			iconSize = 24.dp,
 			circleSize = 40.dp,
 			backgroundColor = Color.Transparent,
-			tint = if (isPrimary) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+			tint = if (isPrimary) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimaryContainer
 		)
 	}
 }
@@ -246,7 +247,7 @@ private fun AccountDetails(
 				horizontalArrangement = Arrangement.spacedBy(8.dp)
 			) {
 				Icon(
-					imageVector = TablerIcons.TrendingUp,
+					imageVector = TablerIcons.Outlined.TrendingUp,
 					contentDescription = null,
 					tint = KoinTheme.colors.profit,
 					modifier = Modifier.size(18.dp)

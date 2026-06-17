@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 
 @Composable
 fun TextField(
@@ -103,7 +103,7 @@ fun TextField(
 					shape = RoundedCornerShape(16.dp)
 				) {
 					Icon(
-						imageVector = TablerIcons.Plus,
+						imageVector = TablerIcons.Outlined.Plus,
 						contentDescription = null,
 						modifier = Modifier.size(16.dp)
 					)

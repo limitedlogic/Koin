@@ -1,4 +1,4 @@
-package dev.apercorn.koin.ui.screens.transactions.entry.components
+package dev.apercorn.koin.ui.screens.transactions.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.CurrencyDollar
 
 @Composable
 fun AmountDisplay(
@@ -25,7 +25,7 @@ fun AmountDisplay(
 		verticalAlignment = Alignment.CenterVertically,
 		horizontalArrangement = Arrangement.End
 	) {
-		// amount text
+		// Amount text
 		Text(
 			text = rawExpression,
 			style = MaterialTheme.typography.displayLarge.copy(
@@ -38,7 +38,7 @@ fun AmountDisplay(
 
 		Spacer(modifier = Modifier.width(12.dp))
 
-		// adjustment button
+		// Adjustment button
 		IconButton(
 			onClick = onAdjustClick,
 			modifier = Modifier.size(44.dp)
@@ -50,7 +50,7 @@ fun AmountDisplay(
 			) {
 				Box(contentAlignment = Alignment.Center) {
 					Icon(
-						imageVector = TablerIcons.CurrencyDollar,
+						imageVector = TablerIcons.Outlined.CurrencyDollar,
 						contentDescription = "Adjustments",
 						tint = MaterialTheme.colorScheme.onSurfaceVariant,
 						modifier = Modifier.size(22.dp)

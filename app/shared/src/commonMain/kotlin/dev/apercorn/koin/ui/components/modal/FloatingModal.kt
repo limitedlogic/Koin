@@ -16,10 +16,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 import dev.apercorn.koin.ui.components.CircularIcon
-import androidx.compose.foundation.isSystemInDarkTheme
 
 @Composable
 fun FloatingModal(
@@ -31,9 +30,6 @@ fun FloatingModal(
 	content: @Composable ColumnScope.() -> Unit
 ) {
 	if (!visible) return
-
-	val darkTheme = isSystemInDarkTheme()
-	ModalSystemBarsEffect(darkTheme)
 
 	Dialog(
 		onDismissRequest = onDismiss,
@@ -94,7 +90,7 @@ fun FloatingModal(
 						if (showCloseButton) {
 							CircularIcon(
 								onClick = onDismiss,
-								imageVector = TablerIcons.X,
+								imageVector = TablerIcons.Outlined.X,
 								iconSize = 20.dp,
 								circleSize = 36.dp,
 								backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,

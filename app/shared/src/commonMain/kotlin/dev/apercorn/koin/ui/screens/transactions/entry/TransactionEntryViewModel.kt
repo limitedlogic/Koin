@@ -2,7 +2,6 @@ package dev.apercorn.koin.ui.screens.transactions.entry
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.screenModelScope
-import compose.icons.TablerIcons
 import dev.apercorn.koin.core.data.repository.AccountRepository
 import dev.apercorn.koin.core.data.repository.CategoryRepository
 import dev.apercorn.koin.core.data.repository.TransactionRepository
@@ -10,13 +9,13 @@ import dev.apercorn.koin.core.domain.model.Account
 import dev.apercorn.koin.core.domain.model.Category
 import dev.apercorn.koin.core.domain.model.TransactionType
 import dev.apercorn.koin.core.util.CurrencyInfo
-import dev.apercorn.koin.core.util.CurrencyFormatter
-import dev.apercorn.koin.ui.util.IconProvider
+import dev.apercorn.koin.ui.screens.transactions.components.NumpadKey
+import dev.apercorn.koin.ui.screens.transactions.components.Op
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 
-data class AddTransactionState(
+data class TransactionEntryState(
 	val date: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
 	val accounts: List<Account> = emptyList(),
 	val categories: List<Category> = emptyList(),
@@ -29,14 +28,14 @@ data class AddTransactionState(
 	val isLoading: Boolean = true
 )
 
-class AddTransactionViewModel(
+class TransactionEntryViewModel(
 	private val accountRepository: AccountRepository,
 	private val categoryRepository: CategoryRepository,
 	private val transactionRepository: TransactionRepository
 ) : ScreenModel {
 
-	private val _state = MutableStateFlow(AddTransactionState())
-	val state: StateFlow<AddTransactionState> = _state.asStateFlow()
+	private val _state = MutableStateFlow(TransactionEntryState())
+	val state: StateFlow<TransactionEntryState> = _state.asStateFlow()
 
 	// expression state machine
 	private var leftOperand: Long? = null

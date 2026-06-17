@@ -49,7 +49,7 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMul
 compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "composeMultiplatform" }
 compose-uiToolingPreview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "composeMultiplatform" }
 compose-materialIconsCore = { module = "org.jetbrains.compose.material:material-icons-core", version.ref = "composeMultiplatform" }
-compose-icons-tabler = { module = "br.com.devsrsouza.compose.icons:tabler-icons", version = "1.1.1" }
+tabler-icons-kmp = { module = "dev.seyfarth:tabler-icons-kmp", version = "1.0.0" }
 
 # Room
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "androidx-room" }

@@ -2,14 +2,16 @@ package dev.apercorn.koin.ui.components.modal
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 import dev.apercorn.koin.ui.components.CircularIcon
 import androidx.compose.material3.ModalBottomSheet as M3ModalBottomSheet
 
@@ -21,17 +23,16 @@ fun FullscreenModal(
 	actionText: String,
 	onAction: () -> Unit,
 	actionEnabled: Boolean = true,
+	containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
 	content: @Composable ColumnScope.() -> Unit
 ) {
 	val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-	val darkTheme = isSystemInDarkTheme()
-
-	ModalSystemBarsEffect(darkTheme)
 
 	M3ModalBottomSheet(
 		onDismissRequest = onDismiss,
 		sheetState = sheetState,
-		containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+		containerColor = containerColor,
+		shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
 		dragHandle = null
 	) {
 		Box(
@@ -51,7 +52,7 @@ fun FullscreenModal(
 					) {
 						CircularIcon(
 							onClick = onDismiss,
-							imageVector = TablerIcons.X,
+							imageVector = TablerIcons.Outlined.X,
 							modifier = Modifier.align(Alignment.CenterStart),
 						)
 						Text(

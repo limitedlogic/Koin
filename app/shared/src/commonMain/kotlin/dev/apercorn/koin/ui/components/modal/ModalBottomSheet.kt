@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -24,19 +25,19 @@ fun ModalBottomSheet(
 	onDismiss: () -> Unit,
 	modifier: Modifier = Modifier,
 	showGrabber: Boolean = true,
-	containerColor: Color = MaterialTheme.colorScheme.secondaryContainer,
+	containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
 	content: @Composable ColumnScope.() -> Unit
 ) {
 	val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-	val darkTheme = isSystemInDarkTheme()
-
-	ModalSystemBarsEffect(darkTheme)
 
 	M3ModalBottomSheet(
 		onDismissRequest = onDismiss,
 		sheetState = sheetState,
 		modifier = modifier,
-		dragHandle = {
+		containerColor = containerColor,
+		shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
+
+			dragHandle = {
 			if (showGrabber) {
 				CompositionLocalProvider(LocalRippleConfiguration provides null) {
 					Box(
@@ -52,7 +53,7 @@ fun ModalBottomSheet(
 						Box(
 							modifier = Modifier
 								.padding(top = 12.dp, bottom = 8.dp)
-								.size(width = 48.dp, height = 6.dp)
+								.size(width = 64.dp, height = 8.dp)
 								.background(
 									color = KoinTheme.colors.dragHandle,
 									shape = CircleShape
@@ -62,12 +63,10 @@ fun ModalBottomSheet(
 				}
 			}
 		},
-		containerColor = containerColor,
 	) {
 		Column(
 			modifier = Modifier
 				.fillMaxWidth()
-				.fillMaxHeight(0.94f)
 				.navigationBarsPadding()
 				.padding(bottom = 16.dp, top = 16.dp)
 		) {
@@ -76,5 +75,3 @@ fun ModalBottomSheet(
 	}
 }
 
-@Composable
-expect fun ModalSystemBarsEffect(darkTheme: Boolean)

@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.Check
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.Check
 
 data class Option<T>(
 	val value: T,
@@ -56,7 +56,7 @@ fun <T> OptionRadioSelect(
 				)
 				if (isSelected) {
 					Icon(
-						imageVector = TablerIcons.Check,
+						imageVector = TablerIcons.Outlined.Check,
 						contentDescription = "Selected",
 						tint = MaterialTheme.colorScheme.primary,
 						modifier = Modifier.size(24.dp)

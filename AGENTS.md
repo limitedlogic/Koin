@@ -14,6 +14,8 @@ Ktor server backend, Koin DI, Voyager navigation.
 
 Every change is judged against all of these:
 
+All features must be implemented to the absolute fullest, with sufficient planning, utilizing only the BEST technique to achieve the solution, no shortcuts at all. Plan extensively. If a solution genuinely is too much for the scope of a task, then mark it as a // TODO. NEVER try to implement something you would not push to production.
+
 - **Correctness**: monetary arithmetic is in integer cents (`Long`), never `Double` or `Float`.
 	Balance is always computed from transactions — never stored. These are invariants, not
 	preferences.

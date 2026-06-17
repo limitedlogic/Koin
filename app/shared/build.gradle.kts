@@ -70,7 +70,7 @@ kotlin {
 			implementation(libs.vico.core)
 
 			// Tabler Icons
-			implementation(libs.compose.icons.tabler)
+			implementation(libs.tabler.icons.kmp)
 		}
 		commonTest.dependencies {
 			implementation(libs.kotlin.test)

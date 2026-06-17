@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import compose.icons.TablerIcons
-import compose.icons.tablericons.*
+import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.*
 
 @Composable
 fun DropdownField(
@@ -58,7 +58,7 @@ fun DropdownField(
 			)
 
 			Icon(
-				imageVector = TablerIcons.ChevronDown,
+				imageVector = TablerIcons.Outlined.ChevronDown,
 				contentDescription = null,
 				tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
 			)
