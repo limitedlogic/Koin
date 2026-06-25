@@ -26,9 +26,19 @@ fun ModalBottomSheet(
 	modifier: Modifier = Modifier,
 	showGrabber: Boolean = true,
 	containerColor: Color = MaterialTheme.colorScheme.tertiaryContainer,
+	confirmDismiss: (() -> Boolean)? = null,
 	content: @Composable ColumnScope.() -> Unit
 ) {
-	val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+	val sheetState = rememberModalBottomSheetState(
+		skipPartiallyExpanded = true,
+		confirmValueChange = { value ->
+			if (value == SheetValue.Hidden && confirmDismiss != null) {
+				confirmDismiss()
+			} else {
+				true
+			}
+		}
+	)
 
 	M3ModalBottomSheet(
 		onDismissRequest = onDismiss,

@@ -1,25 +1,39 @@
 package dev.apercorn.koin.ui.screens.transactions.entry
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.koinScreenModel
 import dev.seyfarth.tablericons.TablerIcons
+import dev.seyfarth.tablericons.outlined.ChevronLeft
 import dev.seyfarth.tablericons.outlined.QuestionMark
 import dev.apercorn.koin.core.domain.model.TransactionType
+import dev.apercorn.koin.ui.components.CircularIcon
 import dev.apercorn.koin.ui.components.modal.ModalBottomSheet
+import dev.apercorn.koin.ui.components.modal.SheetNavController
 import dev.apercorn.koin.ui.screens.transactions.components.*
+import dev.apercorn.koin.ui.screens.accounts.AccountWithBalance
+import dev.apercorn.koin.ui.theme.KoinTheme
 import dev.apercorn.koin.ui.util.IconProvider
 import kotlinx.datetime.*
+
+private sealed class EntrySheetRoute {
+	data object EntryForm : EntrySheetRoute()
+	data object AccountPicker : EntrySheetRoute()
+}
 
 @Composable
 fun Screen.TransactionEntryModal(onDismiss: () -> Unit) {
 	val viewModel = koinScreenModel<TransactionEntryViewModel>()
 	val state by viewModel.state.collectAsState()
 	val today = remember { Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date }
+	val navController = remember { SheetNavController(EntrySheetRoute.EntryForm) }
 
 	// date label — single source of truth
 	val dateLabel = remember(state.date) {
@@ -77,50 +91,74 @@ fun Screen.TransactionEntryModal(onDismiss: () -> Unit) {
 
 	ModalBottomSheet(
 		onDismiss = onDismiss,
+		confirmDismiss = {
+			if (navController.canPop) {
+				navController.pop()
+				false
+			} else {
+				true
+			}
+		},
 		showGrabber = true,
-		containerColor = MaterialTheme.colorScheme.secondaryContainer
+		containerColor = KoinTheme.colors.modalOnBackground
 	) {
 		Column(
-			modifier = Modifier.padding(horizontal = 16.dp)
+			modifier = Modifier
+				.padding(horizontal = 16.dp)
+				.animateContentSize()
 		) {
-			// date picker
-			DatePicker(
-				selectedDateLabel = dateLabel,
-				canGoBack = true,
-				canGoForward = state.date < today,
-				onPrevDay = viewModel::onPrevDay,
-				onNextDay = viewModel::onNextDay,
-				onPickerOpen = viewModel::onPickerOpen
-			)
+			when (navController.current) {
+				EntrySheetRoute.EntryForm -> {
+					// date picker
+					DatePicker(
+						selectedDateLabel = dateLabel,
+						canGoBack = true,
+						canGoForward = state.date < today,
+						onPrevDay = viewModel::onPrevDay,
+						onNextDay = viewModel::onNextDay,
+						onPickerOpen = viewModel::onPickerOpen
+					)
 
-			Spacer(modifier = Modifier.height(8.dp))
+					Spacer(modifier = Modifier.height(8.dp))
 
-			// from → to party row
-			TransactionFlow(
-				fromParty = fromParty,
-				toParty = toParty,
-				onFromClick = { /* TODO: open account picker */ },
-				onToClick = { /* TODO: open category picker */ },
-				onArrowClick = { /* TODO: toggle transaction type */ }
-			)
+					// from → to party row
+					TransactionFlow(
+						fromParty = fromParty,
+						toParty = toParty,
+						onFromClick = { navController.push(EntrySheetRoute.AccountPicker) },
+						onToClick = { /* TODO: open category picker */ },
+						onArrowClick = { /* TODO: toggle transaction type */ }
+					)
 
-			Spacer(modifier = Modifier.height(12.dp))
+					Spacer(modifier = Modifier.height(12.dp))
 
-			// amount display
-			AmountDisplay(
-				rawExpression = state.rawExpression,
-				onAdjustClick = viewModel::onAdjustClick
-			)
+					// amount display
+					AmountDisplay(
+						rawExpression = state.rawExpression
+					)
 
-			Spacer(modifier = Modifier.height(12.dp))
+					Spacer(modifier = Modifier.height(12.dp))
 
-			// numpad
-			Numpad(
-				currencyCode = state.currencyCode,
-				confirmEnabled = state.confirmEnabled,
-				onKey = viewModel::onKey,
-				onConfirm = viewModel::onConfirm
-			)
+					// numpad
+					Numpad(
+						currencyCode = state.currencyCode,
+						confirmEnabled = state.confirmEnabled,
+						onKey = viewModel::onKey,
+						onConfirm = viewModel::onConfirm,
+						onAdjustClick = viewModel::onAdjustClick
+					)
+				}
+
+				EntrySheetRoute.AccountPicker -> {
+					AccountPickerContent(
+						accounts = state.accounts.map { AccountWithBalance(it, 0L) },
+						onAccountSelected = { account ->
+							viewModel.setAccount(account)
+							navController.pop()
+						}
+					)
+				}
+			}
 		}
 	}
 }

@@ -19,6 +19,7 @@ fun koinTypography(): Typography {
 		displayLarge = TextStyle(
 			fontFamily = ibmPlexMonoFontFamily(),
 			fontWeight = FontWeight.Bold,
+			letterSpacing = 0.5.sp,
 			fontSize = 32.sp,
 			lineHeight = 40.sp,
 			color = colorScheme.onBackground
@@ -26,6 +27,7 @@ fun koinTypography(): Typography {
 		displayMedium = TextStyle(
 			fontFamily = ibmPlexMonoFontFamily(),
 			fontWeight = FontWeight.Bold,
+			letterSpacing = 0.5.sp,
 			fontSize = 20.sp,
 			lineHeight = 28.sp,
 			color = colorScheme.onBackground
@@ -33,6 +35,7 @@ fun koinTypography(): Typography {
 		displaySmall = TextStyle(
 			fontFamily = ibmPlexMonoFontFamily(),
 			fontWeight = FontWeight.Medium,
+			letterSpacing = 0.5.sp,
 			fontSize = 16.sp,
 			lineHeight = 20.sp,
 			color = colorScheme.onBackground

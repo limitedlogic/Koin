@@ -28,9 +28,9 @@ enum class AccountType {
 
 	companion object {
 		fun fromString(value: String): AccountType = when (value.uppercase()) {
-			"Cash" -> Cash
-			"Checkings" -> Checkings
-			"Savings" -> Savings
+			"CASH" -> Cash
+			"CHECKINGS" -> Checkings
+			"SAVINGS" -> Savings
 			else -> Checkings
 		}
 

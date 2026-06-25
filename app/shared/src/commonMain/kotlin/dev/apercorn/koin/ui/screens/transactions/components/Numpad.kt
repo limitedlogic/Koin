@@ -2,10 +2,10 @@ package dev.apercorn.koin.ui.screens.transactions.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,13 +20,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.seyfarth.tablericons.TablerIcons
 import dev.seyfarth.tablericons.outlined.Check
+import dev.seyfarth.tablericons.outlined.CurrencyDollar
 import dev.apercorn.koin.ui.theme.KoinTheme
 import dev.apercorn.koin.ui.theme.ibmPlexMonoFontFamily
 import dev.apercorn.koin.ui.theme.interFontFamily
+
+private val NUMPAD_SPACING = 8.dp
+private val NUMPAD_BUTTON_FONT_SIZE = 30.sp
+private val NUMPAD_LABEL_FONT_SIZE = 18.sp
 
 /**
  * Arithmetic operator used in the keypad for on-the-fly calculations.
@@ -65,121 +71,114 @@ fun Numpad(
 	confirmEnabled: Boolean,
 	onKey: (NumpadKey) -> Unit,
 	onConfirm: () -> Unit,
+	onAdjustClick: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	val spacing = 4.dp
-
-	Row(
+	BoxWithConstraints(
 		modifier = modifier
 			.fillMaxWidth()
-			.padding(horizontal = spacing),
-		horizontalArrangement = Arrangement.spacedBy(spacing)
+			.padding(horizontal = NUMPAD_SPACING)
 	) {
-		// Left column: arithmetic operations
-		Column(
-			modifier = Modifier.weight(1f),
-			verticalArrangement = Arrangement.spacedBy(spacing)
-		) {
-			Op.entries.forEach { op ->
-				NumpadGridButton(
-					text = op.symbol(),
-					onClick = { onKey(NumpadKey.Operator(op)) },
-					modifier = Modifier.fillMaxWidth().aspectRatio(1f)
-				)
-			}
-		}
+		val cellSize = (maxWidth - NUMPAD_SPACING * 4) / 5
 
-		// Middle column: digit grid (three columns wide)
-		Column(
-			modifier = Modifier.weight(3f),
-			verticalArrangement = Arrangement.spacedBy(spacing)
-		) {
-			// Row: 7 8 9
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(spacing)
-			) {
+		Column(verticalArrangement = Arrangement.spacedBy(NUMPAD_SPACING)) {
+			// Row 1: ÷  7  8  9  ⌫
+			Row(horizontalArrangement = Arrangement.spacedBy(NUMPAD_SPACING)) {
+				NumpadGridButton(
+					text = Op.DIVIDE.symbol(),
+					onClick = { onKey(NumpadKey.Operator(Op.DIVIDE)) },
+					size = cellSize
+				)
 				(7..9).forEach { d ->
 					NumpadGridButton(
 						text = d.toString(),
 						onClick = { onKey(NumpadKey.Digit(d)) },
-						modifier = Modifier.weight(1f).aspectRatio(1f)
+						size = cellSize
 					)
 				}
+				NumpadGridButton(
+					text = "⌫",
+					isLabel = true,
+					onClick = { onKey(NumpadKey.Backspace) },
+					size = cellSize
+				)
 			}
-			// Row: 4 5 6
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(spacing)
-			) {
+			// Row 2: ×  4  5  6  $
+			Row(horizontalArrangement = Arrangement.spacedBy(NUMPAD_SPACING)) {
+				NumpadGridButton(
+					text = Op.MULTIPLY.symbol(),
+					onClick = { onKey(NumpadKey.Operator(Op.MULTIPLY)) },
+					size = cellSize
+				)
 				(4..6).forEach { d ->
 					NumpadGridButton(
 						text = d.toString(),
 						onClick = { onKey(NumpadKey.Digit(d)) },
-						modifier = Modifier.weight(1f).aspectRatio(1f)
+						size = cellSize
 					)
 				}
+				NumpadGridButton(
+					icon = TablerIcons.Outlined.CurrencyDollar,
+					onClick = onAdjustClick,
+					size = cellSize
+				)
 			}
-			// Row: 1 2 3
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(spacing)
-			) {
-				(1..3).forEach { d ->
-					NumpadGridButton(
-						text = d.toString(),
-						onClick = { onKey(NumpadKey.Digit(d)) },
-						modifier = Modifier.weight(1f).aspectRatio(1f)
-					)
+			// Rows 3-4 wrapped in a Box so the confirm button can span both rows
+			Box {
+				Column(verticalArrangement = Arrangement.spacedBy(NUMPAD_SPACING)) {
+					// Row 3: −  1  2  3  (5th slot reserved for confirm)
+					Row(horizontalArrangement = Arrangement.spacedBy(NUMPAD_SPACING)) {
+						NumpadGridButton(
+							text = Op.SUBTRACT.symbol(),
+							onClick = { onKey(NumpadKey.Operator(Op.SUBTRACT)) },
+							size = cellSize
+						)
+						(1..3).forEach { d ->
+							NumpadGridButton(
+								text = d.toString(),
+								onClick = { onKey(NumpadKey.Digit(d)) },
+								size = cellSize
+							)
+						}
+						Spacer(Modifier.size(cellSize))
+					}
+					// Row 4: +  CUR  0  .  (5th slot reserved for confirm)
+					Row(horizontalArrangement = Arrangement.spacedBy(NUMPAD_SPACING)) {
+						NumpadGridButton(
+							text = Op.ADD.symbol(),
+							onClick = { onKey(NumpadKey.Operator(Op.ADD)) },
+							size = cellSize
+						)
+						NumpadGridButton(
+							text = currencyCode,
+							onClick = { onKey(NumpadKey.CurrencyToggle) },
+							size = cellSize,
+							isLabel = true
+						)
+						NumpadGridButton(
+							text = "0",
+							onClick = { onKey(NumpadKey.Digit(0)) },
+							size = cellSize
+						)
+						NumpadGridButton(
+							text = ".",
+							onClick = { onKey(NumpadKey.Decimal) },
+							size = cellSize
+						)
+						Spacer(Modifier.size(cellSize))
+					}
 				}
-			}
-			// Row: currency  0  .
-			Row(
-				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(spacing)
-			) {
+				// Confirm button overlaid at bottom-right, spanning rows 3-4
 				NumpadGridButton(
-					text = currencyCode,
-					onClick = { onKey(NumpadKey.CurrencyToggle) },
-					modifier = Modifier.weight(1f).aspectRatio(1f),
-					isLabel = true
-				)
-				NumpadGridButton(
-					text = "0",
-					onClick = { onKey(NumpadKey.Digit(0)) },
-					modifier = Modifier.weight(1f).aspectRatio(1f)
-				)
-				NumpadGridButton(
-					text = ".",
-					onClick = { onKey(NumpadKey.Decimal) },
-					modifier = Modifier.weight(1f).aspectRatio(1f)
+					icon = TablerIcons.Outlined.Check,
+					onClick = { if (confirmEnabled) onConfirm() },
+					size = cellSize,
+					height = cellSize * 2 + NUMPAD_SPACING,
+					isAccent = true,
+					enabled = confirmEnabled,
+					modifier = Modifier.align(Alignment.BottomEnd)
 				)
 			}
-		}
-
-		// Right column: backspace (1 box), gap (1 box), done (2 boxes)
-		Column(
-			modifier = Modifier.weight(1f),
-			verticalArrangement = Arrangement.spacedBy(spacing)
-		) {
-			// Row 1: backspace
-			NumpadGridButton(
-				text = "⌫",
-				onClick = { onKey(NumpadKey.Backspace) },
-				modifier = Modifier.fillMaxWidth().aspectRatio(1f)
-			)
-			// Row 2: gap spacer
-			Spacer(modifier = Modifier.fillMaxWidth().aspectRatio(1f))
-			// Rows 3-4: done (2 boxes tall)
-			NumpadGridButton(
-				icon = TablerIcons.Outlined.Check,
-				onClick = {
-					if (confirmEnabled) onConfirm()
-				},
-				modifier = Modifier.fillMaxWidth().aspectRatio(0.5f),
-				isAccent = true,
-				enabled = confirmEnabled
-			)
 		}
 	}
 }
@@ -189,10 +188,12 @@ private fun NumpadGridButton(
 	text: String = "",
 	icon: ImageVector? = null,
 	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
+	size: Dp,
+	height: Dp = size,
 	isAccent: Boolean = false,
 	isLabel: Boolean = false,
-	enabled: Boolean = true
+	enabled: Boolean = true,
+	modifier: Modifier = Modifier
 ) {
 	val containerColor = when {
 		isAccent -> MaterialTheme.colorScheme.primary
@@ -205,8 +206,8 @@ private fun NumpadGridButton(
 
 	Surface(
 		onClick = onClick,
-		modifier = modifier,
-		shape = RoundedCornerShape(12.dp),
+		modifier = modifier.size(width = size, height = height),
+		shape = RoundedCornerShape(10.dp),
 		color = containerColor,
 		enabled = enabled
 	) {
@@ -224,7 +225,7 @@ private fun NumpadGridButton(
 					style = MaterialTheme.typography.titleMedium.copy(
 						fontFamily = if (isLabel) interFontFamily() else ibmPlexMonoFontFamily(),
 						fontWeight = FontWeight.Bold,
-						fontSize = 22.sp
+						fontSize = if (isLabel) NUMPAD_LABEL_FONT_SIZE else NUMPAD_BUTTON_FONT_SIZE
 					),
 					color = if (enabled) contentColor else contentColor.copy(alpha = 0.4f),
 					textAlign = TextAlign.Center

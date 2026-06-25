@@ -11,6 +11,7 @@ data class KoinCustomColors(
 	// Layout colors
 	val dragHandle: Color,
 	val numpadButton: Color,
+	val modalOnBackground: Color,
 
 	// Semantic colors
 	val profit: Color,
@@ -21,6 +22,7 @@ val LocalKoinCustomColors = staticCompositionLocalOf {
 	KoinCustomColors(
 		dragHandle = Color.Unspecified,
 		numpadButton = Color.Unspecified,
+		modalOnBackground = Color.Unspecified,
 		profit = Color.Unspecified,
 		loss = Color.Unspecified,
 	)
@@ -29,7 +31,8 @@ val LocalKoinCustomColors = staticCompositionLocalOf {
 val DarkKoinCustomColors = KoinCustomColors(
 	// Layout colors
 	dragHandle = Color(0xFF313131),
-	numpadButton = Color(0xFF050505),
+	numpadButton = Color(0xFF0C0C0C),
+	modalOnBackground = Color(0xFF131313),
 
 	// Semantic colors
 	profit = Color(0xFF81C784),
@@ -40,6 +43,7 @@ val LightKoinCustomColors = KoinCustomColors(
 	// Layout colors
 	dragHandle = Color(0xFF313131),
 	numpadButton = Color(0xFF171717),
+	modalOnBackground = Color(0xFF171717),
 
 	// Semantic colors
 	profit = Color(0xFF388E3C),
@@ -52,7 +56,7 @@ val DarkKoinColorScheme = darkColorScheme(
 	secondary = Color(0xFF326838),
 	tertiary = Color(0xFF20218D),
 
-	surface = Color(0xFF161618),
+	surface = Color(0xFF161616),
 	surfaceVariant = Color(0xFF131315),
 
 	outline = Color(0xD51A1A1A),

@@ -55,7 +55,7 @@ fun AccountDetailsSheet(
 
 	ModalBottomSheet(
 		onDismiss = onDismiss,
-		containerColor = MaterialTheme.colorScheme.surface,
+		containerColor = KoinTheme.colors.modalOnBackground,
 		showGrabber = false,
 	) {
 		Column(
@@ -104,19 +104,17 @@ fun AccountDetailsSheet(
 			// Action buttons grid
 			Row(
 				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(12.dp)
+				horizontalArrangement = Arrangement.SpaceBetween
 			) {
 				ActionButton(
-					icon = TablerIcons.Outlined.Edit,
+					icon = TablerIcons.Outlined.CashEdit,
 					label = "Set balance",
 					onClick = onSetBalance,
-					modifier = Modifier.weight(1f)
 				)
 				ActionButton(
-					icon = TablerIcons.Outlined.ArrowsLeftRight,
+					icon = TablerIcons.Outlined.CashMove,
 					label = "Transfer",
 					onClick = onTransfer,
-					modifier = Modifier.weight(1f)
 				)
 			}
 
@@ -124,19 +122,17 @@ fun AccountDetailsSheet(
 
 			Row(
 				modifier = Modifier.fillMaxWidth(),
-				horizontalArrangement = Arrangement.spacedBy(12.dp)
+				horizontalArrangement = Arrangement.SpaceBetween
 			) {
 				ActionButton(
-					icon = TablerIcons.Outlined.Plus,
+					icon = TablerIcons.Outlined.CreditCard,
 					label = "New Transaction",
 					onClick = onNewTransaction,
-					modifier = Modifier.weight(1f)
 				)
 				ActionButton(
-					icon = TablerIcons.Outlined.List,
+					icon = TablerIcons.Outlined.Wallet,
 					label = "View All",
 					onClick = onViewAll,
-					modifier = Modifier.weight(1f)
 				)
 			}
 
@@ -148,11 +144,13 @@ fun AccountDetailsSheet(
 				modifier = Modifier
 					.fillMaxWidth()
 					.height(48.dp),
-				colors = ButtonDefaults.filledTonalButtonColors(),
+				colors = ButtonDefaults.buttonColors(
+					containerColor = KoinTheme.colors.numpadButton
+				),
 				shape = RoundedCornerShape(12.dp)
 			) {
 				Icon(
-					imageVector = TablerIcons.Outlined.Adjustments,
+					imageVector = TablerIcons.Outlined.AdjustmentsDollar,
 					contentDescription = null,
 					modifier = Modifier.size(18.dp)
 				)
@@ -357,10 +355,13 @@ private fun ActionButton(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	OutlinedButton(
+	Button(
 		onClick = onClick,
-		modifier = modifier.height(56.dp),
-		shape = RoundedCornerShape(16.dp)
+		modifier = modifier.height(45.dp),
+		shape = RoundedCornerShape(10.dp),
+		colors = ButtonDefaults.buttonColors(
+			containerColor = KoinTheme.colors.numpadButton
+		)
 	) {
 		Icon(
 			imageVector = icon,
@@ -368,6 +369,9 @@ private fun ActionButton(
 			modifier = Modifier.size(20.dp)
 		)
 		Spacer(modifier = Modifier.width(8.dp))
-		Text(label, style = MaterialTheme.typography.labelLarge)
+		Text(
+			label,
+			style = MaterialTheme.typography.labelLarge.copy(fontSize = 15.sp)
+		)
 	}
 }

@@ -5,6 +5,8 @@
 transactions modalboittomsheet has black icons on status bar but accountdetailssheet doesnt has the expected white icons
 padding of header in modalbottomsheet different from padding content. should be configuratble from props
 
+settings:
+- about
 
 future:
 

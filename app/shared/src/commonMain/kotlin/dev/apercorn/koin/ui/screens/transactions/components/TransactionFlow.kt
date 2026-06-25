@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import dev.seyfarth.tablericons.TablerIcons
 import dev.seyfarth.tablericons.outlined.ArrowRight
 
@@ -18,9 +19,9 @@ import dev.seyfarth.tablericons.outlined.ArrowRight
  */
 data class PartyUiModel(
 	val id: String,
-	val label: String,          // display name
-	val icon: ImageVector,      // resolved from account/category type
-	val roleTag: String         // "ACCOUNT" | "EXPENSE" | "INCOME" | "TRANSFER"
+	val label: String,
+	val icon: ImageVector,
+	val roleTag: String // account, expense, income
 )
 
 /**
@@ -51,7 +52,7 @@ fun TransactionFlow(
 			imageVector = TablerIcons.Outlined.ArrowRight,
 			contentDescription = "Direction",
 			tint = MaterialTheme.colorScheme.onSurfaceVariant,
-			modifier = Modifier.size(24.dp).padding(horizontal = 4.dp)
+			modifier = Modifier.size(36.dp).padding(horizontal = 8.dp)
 		)
 
 		FlowButton(
@@ -74,21 +75,19 @@ private fun FlowButton(
 	Card(
 		onClick = onClick,
 		shape = RoundedCornerShape(16.dp),
-		colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+		colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
 		modifier = modifier
 	) {
 		Column(
 			modifier = Modifier
 				.padding(horizontal = 16.dp, vertical = 12.dp),
-			horizontalAlignment = Alignment.CenterHorizontally
 		) {
 			Text(
 				text = party.roleTag,
-				style = MaterialTheme.typography.labelSmall,
-				fontWeight = FontWeight.SemiBold,
-				color = MaterialTheme.colorScheme.onSurfaceVariant
+				style = MaterialTheme.typography.labelSmall.copy(fontSize = 10.sp),
+				color = MaterialTheme.colorScheme.onSurfaceVariant,
 			)
-			Spacer(modifier = Modifier.height(4.dp))
+			Spacer(modifier = Modifier.height(8.dp))
 			Row(
 				verticalAlignment = Alignment.CenterVertically,
 				horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -96,7 +95,7 @@ private fun FlowButton(
 				Icon(
 					imageVector = party.icon,
 					contentDescription = party.label,
-					tint = MaterialTheme.colorScheme.primary,
+					tint = MaterialTheme.colorScheme.onSecondaryContainer,
 					modifier = Modifier.size(20.dp)
 				)
 				Text(
