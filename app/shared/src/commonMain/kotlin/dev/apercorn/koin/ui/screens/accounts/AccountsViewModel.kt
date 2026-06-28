@@ -74,17 +74,32 @@ class AccountsViewModel(
 		colorHex: String
 	) {
 		screenModelScope.launch {
+			val accountId = com.benasher44.uuid.uuid4().toString()
 			val account = Account(
-				id = com.benasher44.uuid.uuid4().toString(),
+				id = accountId,
 				name = name,
 				description = description,
 				type = type,
 				currency = currency,
-				balance = initialBalanceCents,
+				balance = 0L, // computed from transactions
 				iconName = iconName,
 				colorHex = colorHex
 			)
 			accountRepository.save(account)
+
+			// Create an adjustment transaction for the initial balance
+			if (initialBalanceCents > 0) {
+				val adjustment = dev.apercorn.koin.core.domain.model.Transaction.OneOff(
+					id = com.benasher44.uuid.uuid4().toString(),
+					accountId = accountId,
+					amount = initialBalanceCents,
+					currency = currency,
+					type = dev.apercorn.koin.core.domain.model.TransactionType.ADJUSTMENT,
+					date = dev.apercorn.koin.core.util.DateUtils.today(),
+					title = "Initial balance"
+				)
+				transactionRepository.save(adjustment)
+			}
 		}
 	}
 

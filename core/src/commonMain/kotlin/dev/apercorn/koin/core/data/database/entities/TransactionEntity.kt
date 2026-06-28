@@ -16,11 +16,18 @@ import androidx.room.*
 			parentColumns = ["id"],
 			childColumns = ["categoryId"],
 			onDelete = ForeignKey.SET_NULL
+		),
+		ForeignKey(
+			entity = AccountEntity::class,
+			parentColumns = ["id"],
+			childColumns = ["linkedAccountId"],
+			onDelete = ForeignKey.SET_NULL
 		)
 	],
 	indices = [
 		Index(value = ["accountId"]),
 		Index(value = ["categoryId"]),
+		Index(value = ["linkedAccountId"]),
 		Index(value = ["date"])
 	]
 )
@@ -29,11 +36,14 @@ data class TransactionEntity(
 	val accountId: String,
 	val categoryId: String? = null,
 	val counterpartyId: String? = null,
-	val amount: Long, // stored in minor units
+	val linkedAccountId: String? = null,
+	val amount: Long, // stored in minor units, always positive magnitude
 	val currency: String,
-	val type: String, // INCOME, EXPENSE, TRANSFER
+	val type: String, // INCOME, EXPENSE, TRANSFER, ADJUSTMENT
 	val date: String, // ISO LocalDate string
+	val title: String? = null,
 	val note: String? = null,
+	val tags: String? = null, // JSON array of tag IDs
 	val isRecurring: Boolean = false,
 	val recurringId: String? = null,
 	val createdAt: Long,

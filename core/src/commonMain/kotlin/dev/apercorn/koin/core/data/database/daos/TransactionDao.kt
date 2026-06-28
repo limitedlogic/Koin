@@ -46,6 +46,7 @@ interface TransactionDao {
             CASE WHEN type = 'INCOME' THEN amount 
             WHEN type = 'EXPENSE' THEN -amount 
             WHEN type = 'TRANSFER' AND accountId = :accountId THEN -amount
+            WHEN type = 'ADJUSTMENT' THEN amount
             ELSE 0 END
         ), 0) FROM transactions WHERE accountId = :accountId
         """
@@ -56,6 +57,7 @@ interface TransactionDao {
 		"""
         SELECT COALESCE(SUM(
             CASE WHEN type = 'INCOME' THEN amount 
+            WHEN type = 'ADJUSTMENT' THEN amount
             ELSE -amount END
         ), 0) FROM transactions
         """

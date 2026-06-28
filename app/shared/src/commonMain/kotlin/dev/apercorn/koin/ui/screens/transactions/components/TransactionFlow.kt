@@ -33,7 +33,6 @@ fun TransactionFlow(
 	toParty: PartyUiModel,
 	onFromClick: () -> Unit,
 	onToClick: () -> Unit,
-	onArrowClick: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
 	Row(

@@ -16,7 +16,7 @@ import dev.apercorn.koin.core.domain.SeedCategories
 		RecurringEntity::class,
 		CounterpartyEntity::class
 	],
-	version = 2,
+	version = 3,
 	exportSchema = false
 )
 @TypeConverters(Converters::class)

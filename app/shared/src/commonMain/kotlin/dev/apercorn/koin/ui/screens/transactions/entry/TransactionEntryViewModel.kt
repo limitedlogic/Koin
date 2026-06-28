@@ -7,6 +7,7 @@ import dev.apercorn.koin.core.data.repository.CategoryRepository
 import dev.apercorn.koin.core.data.repository.TransactionRepository
 import dev.apercorn.koin.core.domain.model.Account
 import dev.apercorn.koin.core.domain.model.Category
+import dev.apercorn.koin.core.domain.model.CategoryType
 import dev.apercorn.koin.core.domain.model.TransactionType
 import dev.apercorn.koin.core.util.CurrencyInfo
 import dev.apercorn.koin.ui.screens.transactions.components.NumpadKey
@@ -15,18 +16,34 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.datetime.*
 
+sealed class PartySelection {
+	data class Account(val account: dev.apercorn.koin.core.domain.model.Account) : PartySelection()
+	data class IncomeCategory(val category: Category) : PartySelection()
+	data class ExpenseCategory(val category: Category) : PartySelection()
+}
+
 data class TransactionEntryState(
 	val date: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
 	val accounts: List<Account> = emptyList(),
 	val categories: List<Category> = emptyList(),
-	val selectedAccount: Account? = null,
-	val selectedCategory: Category? = null,
-	val transactionType: TransactionType = TransactionType.EXPENSE,
-	val rawExpression: String = "",
+	val fromSelection: PartySelection? = null,
+	val toSelection: PartySelection? = null,
+	val rawExpression: String = "0",
+	val amountCents: Long = 0L,
 	val currencyCode: String = "USD",
+	val title: String = "",
 	val confirmEnabled: Boolean = false,
 	val isLoading: Boolean = true
-)
+) {
+	// computed
+	val transactionType: TransactionType
+		get() = when {
+			fromSelection is PartySelection.Account && toSelection is PartySelection.ExpenseCategory -> TransactionType.EXPENSE
+			fromSelection is PartySelection.IncomeCategory && toSelection is PartySelection.Account -> TransactionType.INCOME
+			fromSelection is PartySelection.Account && toSelection is PartySelection.Account -> TransactionType.TRANSFER
+			else -> TransactionType.EXPENSE
+		}
+}
 
 class TransactionEntryViewModel(
 	private val accountRepository: AccountRepository,
@@ -54,13 +71,15 @@ class TransactionEntryViewModel(
 			) { accounts, categories ->
 				Pair(accounts, categories)
 			}.collect { (accounts, categories) ->
+				val firstAccount = accounts.firstOrNull()
+				val firstExpense = categories.firstOrNull { it.type == CategoryType.EXPENSE }
 				_state.update {
 					it.copy(
 						accounts = accounts,
 						categories = categories,
-						selectedAccount = accounts.firstOrNull(),
-						selectedCategory = categories.firstOrNull { cat -> cat.type.name == "EXPENSE" },
-						currencyCode = accounts.firstOrNull()?.currency ?: "USD",
+						fromSelection = firstAccount?.let { a -> PartySelection.Account(a) },
+						toSelection = firstExpense?.let { c -> PartySelection.ExpenseCategory(c) },
+						currencyCode = firstAccount?.currency ?: "USD",
 						isLoading = false
 					)
 				}
@@ -84,21 +103,35 @@ class TransactionEntryViewModel(
 		// TODO: open calendar picker sheet
 	}
 
-	fun setAccount(account: Account) {
+	fun setFromAccount(account: Account) {
 		_state.update {
 			it.copy(
-				selectedAccount = account,
+				fromSelection = PartySelection.Account(account),
 				currencyCode = account.currency
 			)
 		}
 	}
 
-	fun setCategory(category: Category) {
-		_state.update { it.copy(selectedCategory = category) }
+	fun setFromIncomeCategory(category: Category) {
+		_state.update {
+			it.copy(fromSelection = PartySelection.IncomeCategory(category))
+		}
 	}
 
-	fun setTransactionType(type: TransactionType) {
-		_state.update { it.copy(transactionType = type) }
+	fun setToExpenseCategory(category: Category) {
+		_state.update {
+			it.copy(toSelection = PartySelection.ExpenseCategory(category))
+		}
+	}
+
+	fun setToAccount(account: Account) {
+		_state.update {
+			it.copy(toSelection = PartySelection.Account(account))
+		}
+	}
+
+	fun setTitle(title: String) {
+		_state.update { it.copy(title = title) }
 	}
 
 	fun onAdjustClick() {
@@ -112,19 +145,60 @@ class TransactionEntryViewModel(
 			is NumpadKey.Operator -> applyOperator(key.op)
 			is NumpadKey.Backspace -> backspace()
 			is NumpadKey.CurrencyToggle -> cycleCurrency()
-			is NumpadKey.Confirm -> confirm()
+			is NumpadKey.Confirm -> evaluateExpression()
 		}
 		updateDisplay()
 	}
 
-	fun onConfirm() {
+	/** Finalize the expression and update [TransactionEntryState.amountCents]. */
+	fun evaluateExpression() {
 		confirm()
 		updateDisplay()
-		saveTransaction()
+	}
+
+	fun saveTransaction() {
+		val state = _state.value
+		val totalCents = leftOperand ?: 0L
+
+		if (totalCents <= 0) return
+
+		val (accountId, categoryId, linkedAccountId) = when {
+			state.fromSelection is PartySelection.Account && state.toSelection is PartySelection.ExpenseCategory -> Triple(
+				state.fromSelection.account.id,
+				state.toSelection.category.id,
+				null
+			)
+			state.fromSelection is PartySelection.IncomeCategory && state.toSelection is PartySelection.Account -> Triple(
+				state.toSelection.account.id,
+				state.fromSelection.category.id,
+				null
+			)
+			state.fromSelection is PartySelection.Account && state.toSelection is PartySelection.Account -> Triple(
+				state.fromSelection.account.id,
+				null,
+				state.toSelection.account.id
+			)
+			else -> return
+		}
+
+		screenModelScope.launch {
+			val transaction = dev.apercorn.koin.core.domain.model.Transaction.OneOff(
+				id = com.benasher44.uuid.uuid4().toString(),
+				accountId = accountId,
+				categoryId = categoryId,
+				linkedAccountId = linkedAccountId,
+				amount = totalCents,
+				currency = state.currencyCode,
+				type = state.transactionType,
+				date = state.date,
+				title = state.title.takeIf { it.isNotBlank() }
+			)
+			transactionRepository.save(transaction)
+			resetForm()
+		}
 	}
 
 	private fun appendDigit(digit: Int) {
-		// prevent leading zeros
 		if (currentInput == "0") {
 			currentInput = digit.toString()
 		} else {
@@ -144,7 +218,6 @@ class TransactionEntryViewModel(
 
 	private fun applyOperator(op: Op) {
 		if (currentInput.isNotEmpty()) {
-			// if we already have a pending operator, evaluate first
 			if (pendingOperator != null && leftOperand != null) {
 				evaluate()
 			}
@@ -152,7 +225,6 @@ class TransactionEntryViewModel(
 			pendingOperator = op
 			currentInput = ""
 		} else if (leftOperand != null) {
-			// change operator without new input
 			pendingOperator = op
 		}
 	}
@@ -161,7 +233,6 @@ class TransactionEntryViewModel(
 		if (currentInput.isNotEmpty()) {
 			currentInput = currentInput.dropLast(1)
 		} else {
-			// no input — cancel pending operator
 			pendingOperator = null
 		}
 	}
@@ -192,15 +263,12 @@ class TransactionEntryViewModel(
 	}
 
 	private fun confirm() {
-		// if operator pending, complete evaluation
 		if (pendingOperator != null && leftOperand != null && currentInput.isNotEmpty()) {
 			evaluate()
 		} else if (leftOperand != null && pendingOperator != null) {
-			// operator pending but no right operand — just cancel the op
 			pendingOperator = null
 		}
 
-		// if no operator and no left operand, take current input as the value
 		if (leftOperand == null && currentInput.isNotEmpty()) {
 			leftOperand = centsFromCurrentInput()
 		}
@@ -225,39 +293,13 @@ class TransactionEntryViewModel(
 			}
 			if (currentInput.isNotEmpty()) {
 				if (pendingOperator == null && leftOperand != null) {
-					// user started typing a new right operand after operator was already cleared
 				}
 				append(currentInput)
 			}
 		}
 		val enabled = leftOperand != null || currentInput.isNotEmpty()
-		_state.update { it.copy(rawExpression = display.ifEmpty { "0" }, confirmEnabled = enabled) }
-	}
-
-	private fun saveTransaction() {
-		val state = _state.value
 		val totalCents = leftOperand ?: 0L
-		val account = state.selectedAccount ?: return
-
-		if (totalCents <= 0) return
-
-		screenModelScope.launch {
-			val transaction = dev.apercorn.koin.core.domain.model.Transaction.OneOff(
-				id = com.benasher44.uuid.uuid4().toString(),
-				accountId = account.id,
-				categoryId = state.selectedCategory?.id,
-				amount = when (state.transactionType) {
-					TransactionType.INCOME -> totalCents
-					TransactionType.EXPENSE -> -totalCents
-					TransactionType.TRANSFER -> -totalCents
-				},
-				currency = state.currencyCode,
-				type = state.transactionType,
-				date = state.date
-			)
-			transactionRepository.save(transaction)
-			resetForm()
-		}
+		_state.update { it.copy(rawExpression = display.ifEmpty { "0" }, confirmEnabled = enabled, amountCents = totalCents) }
 	}
 
 	private fun resetForm() {
@@ -273,7 +315,6 @@ class TransactionEntryViewModel(
 		val hasDecimal = currentInput.contains('.')
 		return when {
 			!hasDecimal -> {
-				// whole units → cents
 				val whole = currentInput.toLongOrNull() ?: 0L
 				when (info.decimalDigits) {
 					0 -> whole

@@ -47,7 +47,7 @@ fun ModalBottomSheet(
 		containerColor = containerColor,
 		shape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp),
 
-			dragHandle = {
+		dragHandle = {
 			if (showGrabber) {
 				CompositionLocalProvider(LocalRippleConfiguration provides null) {
 					Box(

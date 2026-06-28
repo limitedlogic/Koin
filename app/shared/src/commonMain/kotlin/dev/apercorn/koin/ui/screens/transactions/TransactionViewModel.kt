@@ -110,21 +110,26 @@ class TransactionViewModel(
 					val start = startOfWeek(today)
 					s.copy(rangeStart = start, rangeEnd = today, rangeMode = mode, canGoForward = false)
 				}
+
 				DateRangeMode.MONTH -> {
 					val start = startOfMonth(today)
 					s.copy(rangeStart = start, rangeEnd = today, rangeMode = mode, canGoForward = false)
 				}
+
 				DateRangeMode.QUARTER -> {
 					val start = startOfQuarter(today)
 					s.copy(rangeStart = start, rangeEnd = today, rangeMode = mode, canGoForward = false)
 				}
+
 				DateRangeMode.YEAR -> {
 					val start = LocalDate(today.year, 1, 1)
 					s.copy(rangeStart = start, rangeEnd = today, rangeMode = mode, canGoForward = false)
 				}
+
 				DateRangeMode.ALL_TIME -> {
 					s.copy(rangeMode = mode, canGoForward = false, canGoBack = false)
 				}
+
 				DateRangeMode.CUSTOM -> s.copy(rangeMode = mode)
 			}
 		}
@@ -138,18 +143,22 @@ class TransactionViewModel(
 					val start = startOfWeek(today)
 					s.copy(rangeStart = start, rangeEnd = today, canGoForward = false)
 				}
+
 				DateRangeMode.MONTH -> {
 					val start = startOfMonth(today)
 					s.copy(rangeStart = start, rangeEnd = today, canGoForward = false)
 				}
+
 				DateRangeMode.QUARTER -> {
 					val start = startOfQuarter(today)
 					s.copy(rangeStart = start, rangeEnd = today, canGoForward = false)
 				}
+
 				DateRangeMode.YEAR -> {
 					val start = LocalDate(today.year, 1, 1)
 					s.copy(rangeStart = start, rangeEnd = today, canGoForward = false)
 				}
+
 				DateRangeMode.ALL_TIME -> s
 				DateRangeMode.CUSTOM -> s
 			}

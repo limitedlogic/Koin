@@ -14,7 +14,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -22,21 +26,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.apercorn.koin.core.domain.model.Account
 import dev.apercorn.koin.core.domain.model.Category
+import dev.apercorn.koin.core.domain.model.CategoryType
 import dev.apercorn.koin.ui.screens.accounts.AccountWithBalance
 import dev.apercorn.koin.ui.screens.accounts.components.AccountListContent
 import dev.apercorn.koin.ui.util.IconProvider
 
 @Composable
-fun AccountPickerContent(
+fun CategoryPickerContent(
+	categories: List<Category>,
 	accounts: List<AccountWithBalance>,
-	incomeCategories: List<Category>,
+	onCategorySelected: (Category) -> Unit,
 	onAccountSelected: (Account) -> Unit,
-	onIncomeCategorySelected: (Category) -> Unit,
 	modifier: Modifier = Modifier,
 	initialTab: Int = 0
 ) {
 	var selectedTab by remember(initialTab) { mutableStateOf(initialTab) }
-	val tabs = listOf("Banking", "Income")
+	val tabs = listOf("Expense", "Banking")
 
 	Column(modifier = modifier.fillMaxWidth()) {
 		// Tab pills
@@ -74,26 +79,21 @@ fun AccountPickerContent(
 		Spacer(modifier = Modifier.height(12.dp))
 
 		when (selectedTab) {
-			0 -> AccountListContent(
-				accounts = accounts,
-				onAccountClick = onAccountSelected,
-				modifier = Modifier.padding(horizontal = 16.dp)
-			)
-
-			1 -> {
-				// Income categories
+			0 -> {
+				// Expense categories
+				val expenseCategories = categories.filter { it.type == CategoryType.EXPENSE }
 				Column(
 					modifier = Modifier.padding(horizontal = 16.dp),
 					verticalArrangement = Arrangement.spacedBy(8.dp)
 				) {
-					incomeCategories.forEach { category ->
+					expenseCategories.forEach { category ->
 						val icon = IconProvider.resolve(category.iconName)
 						Row(
 							modifier = Modifier
 								.fillMaxWidth()
 								.clip(RoundedCornerShape(12.dp))
 								.background(MaterialTheme.colorScheme.surface)
-								.clickable { onIncomeCategorySelected(category) }
+								.clickable { onCategorySelected(category) }
 								.padding(horizontal = 16.dp, vertical = 14.dp),
 							verticalAlignment = Alignment.CenterVertically,
 							horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -113,6 +113,15 @@ fun AccountPickerContent(
 						}
 					}
 				}
+			}
+
+			1 -> {
+				// Banking accounts (for transfers)
+				AccountListContent(
+					accounts = accounts,
+					onAccountClick = onAccountSelected,
+					modifier = Modifier.padding(horizontal = 16.dp)
+				)
 			}
 		}
 	}

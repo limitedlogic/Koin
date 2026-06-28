@@ -21,6 +21,7 @@ import dev.apercorn.koin.ui.components.money.TotalBalance
 import dev.apercorn.koin.ui.screens.transactions.components.DateRangeModeSheet
 import dev.apercorn.koin.ui.screens.transactions.components.DateRangeSelector
 import dev.apercorn.koin.ui.screens.transactions.entry.TransactionEntryModal
+import dev.apercorn.koin.ui.theme.KoinTheme
 import kotlinx.datetime.*
 
 object TransactionScreen : Screen {
@@ -198,9 +199,10 @@ private fun TransactionItem(
 				text = CurrencyFormatter.format(transaction.amount, transaction.currency),
 				style = MaterialTheme.typography.labelLarge,
 				color = when (transaction.type) {
-					TransactionType.INCOME -> MaterialTheme.colorScheme.primary
-					TransactionType.EXPENSE -> MaterialTheme.colorScheme.error
+					TransactionType.INCOME -> KoinTheme.colors.profit
+					TransactionType.EXPENSE -> KoinTheme.colors.loss
 					TransactionType.TRANSFER -> MaterialTheme.colorScheme.onSurface
+					TransactionType.ADJUSTMENT -> MaterialTheme.colorScheme.onSurface
 				}
 			)
 		}

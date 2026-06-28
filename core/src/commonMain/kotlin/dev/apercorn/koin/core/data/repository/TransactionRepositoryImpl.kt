@@ -79,11 +79,14 @@ class TransactionRepositoryImpl(
 				accountId = accountId,
 				categoryId = categoryId,
 				counterpartyId = counterpartyId,
+				linkedAccountId = linkedAccountId,
 				amount = amount,
 				currency = currency,
 				type = TransactionType.fromString(type),
 				date = LocalDate.parse(date),
+				title = title,
 				note = note,
+				tags = tags,
 				recurringId = recurringId
 			)
 		} else {
@@ -92,11 +95,14 @@ class TransactionRepositoryImpl(
 				accountId = accountId,
 				categoryId = categoryId,
 				counterpartyId = counterpartyId,
+				linkedAccountId = linkedAccountId,
 				amount = amount,
 				currency = currency,
 				type = TransactionType.fromString(type),
 				date = LocalDate.parse(date),
-				note = note
+				title = title,
+				note = note,
+				tags = tags
 			)
 		}
 	}
@@ -112,11 +118,14 @@ class TransactionRepositoryImpl(
 			accountId = accountId,
 			categoryId = categoryId,
 			counterpartyId = counterpartyId,
+			linkedAccountId = linkedAccountId,
 			amount = amount,
 			currency = currency,
 			type = TransactionType.toString(type),
 			date = date.toString(),
+			title = title,
 			note = note,
+			tags = tags,
 			isRecurring = isRecurring,
 			recurringId = recurringId,
 			createdAt = now,

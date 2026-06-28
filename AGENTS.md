@@ -7,7 +7,7 @@ Ktor server backend, Koin DI, Voyager navigation.
 
 - Package manager: Gradle (version catalog at `gradle/libs.versions.toml`)
 - Targets: Android, iOS (arm64 + simulator), JVM
-- Frontend checks: `./gradlew :app:shared:build`, `./gradlew :app:androidApp:build`
+- Frontend checks: Development must build with `./gradlew :app:androidApp:build` unless other targets specified
 - Server checks: `./gradlew :server:build`
 
 ## Quality bar
